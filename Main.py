@@ -1,10 +1,12 @@
+from shootout import *
 
 def main():
-    shootout = Shootout()
+    s = Shootout("Germany","Italy")
     
 
 
     
 # display some lines
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()
