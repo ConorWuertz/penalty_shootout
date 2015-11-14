@@ -1,5 +1,9 @@
 from Tkinter import *
 
+#CONSTANTS
+FIELD_LENGTH = 1000
+FIELD_WIDTH = 600
+
 
 class Shootout(object):
     
@@ -13,26 +17,15 @@ class Shootout(object):
         self.shootingTeam = self.teamA
         self.goalieTeam = self.teamB
         root = Tk()
-        frame = Frame(root, width = 500, height = 500)
-        frame.bind("<Left>", self.leftKey)
-        frame.bind("<Right>", self.rightKey)
-        frame.focus_set()
-        frame.pack()
+        canvas = Canvas(root,width=FIELD_LENGTH, height=FIELD_WIDTH,background='darkgreen')
+ #       root.minsize(width=FIELD_LENGTH, height=FIELD_WIDTH)
+ #       root.maxsize(width=FIELD_LENGTH, height=FIELD_WIDTH)
+ #       root.configure(background='darkgreen')
+        canvas.bind("<Left>", self.leftKey)
+        canvas.bind("<Right>", self.rightKey)
+        canvas.focus_set()
+        canvas.pack()
 
-        bottomframe = Frame(root)
-        bottomframe.pack( side = BOTTOM )
-
-        redbutton = Button(frame, text="Red", fg="red")
-        redbutton.pack( side = LEFT)
-
-        greenbutton = Button(frame, text="Brown", fg="brown")
-        greenbutton.pack( side = LEFT )
-
-        bluebutton = Button(frame, text="Blue", fg="blue")
-        bluebutton.pack( side = LEFT )
-
-        blackbutton = Button(bottomframe, text="Black", fg="black")
-        blackbutton.pack( side = BOTTOM)
         self.playRound()
         root.mainloop()
 
@@ -83,6 +76,13 @@ class Field:
     def __init__(self, teamA, teamB):
         self.teamA = teamA
         self.teamB = teamB
+        self.ball = Ball()
+
+class Ball:
+
+    def __init__(self):
+        self.x = 250
+        self.y = 250
 
 
 
