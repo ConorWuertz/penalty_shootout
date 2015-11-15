@@ -23,8 +23,8 @@ class Shootout(object):
 
 
 
-        self.teamA = Team(LEFT_POST,teamA,'red')              #create a team with the name of the first country
-        self.teamB = Team(RIGHT_POST-200, teamB,'blue')             #create a team with the name of the second country
+        self.teamA = Team(LEFT_POST,teamA,'red',1)              #create a team with the name of the first country
+        self.teamB = Team(RIGHT_POST-200, teamB,'blue',1)             #create a team with the name of the second country
         self.teams = [self.teamA,self.teamB]
 
         self.shootingTeam = self.teamA      #teamA starts with shooting
@@ -35,7 +35,8 @@ class Shootout(object):
         self.referee = Referee()                    #create the referee
 
         #create the logical representation of the goalie
-        self.goalie = Goalie(LEFT_POST+GOAL_LENGTH/2,CROSSBAR_TOP+GOAL_HEIGHT -200, self.goalieTeam.color)
+        self.goalie = Goalie(LEFT_POST+GOAL_LENGTH/2,CROSSBAR_TOP+GOAL_HEIGHT -200, self.goalieTeam.color,1.5)
+        self.kicker = Player(LEFT_POST+GOAL_LENGTH/2 - 30 ,CROSSBAR_TOP+GOAL_HEIGHT +60, self.shootingTeam.color,1.5)
 
         #create the logical representation of the ball
         self.ball = Ball(LEFT_POST+GOAL_LENGTH/2,CROSSBAR_TOP+GOAL_HEIGHT+150)
@@ -116,15 +117,20 @@ class Shootout(object):
         #clear the canvas of prior drawings 
         self.canvas.delete('temp')
 
+        #paint the players
         for team in self.teams:
-
             for player in team.players:
                 self.drawPlayer(player)
 
-        
+        #paint the goal
         self.drawGoal()
 
+        #paint the goalie
         self.drawPlayer(self.goalie)
+
+        #paint the kicking player
+        self.drawPlayer(self.kicker)
+
 
         self.drawBall()
        
@@ -170,10 +176,10 @@ class Shootout(object):
 
 class Team:
 
-    def __init__(self, startX, name,color):
+    def __init__(self, startX, name,color,scale):
         self.name = name
         self.color = color
-        self.players = [Player(startX+ i*50, 400,color) for i in range(5)]
+        self.players = [Player(startX+ i*50, 400,color,scale) for i in range(5)]
 
 
     def shoot(self):
@@ -186,20 +192,20 @@ class Team:
 
 class Player:
 
-    def __init__(self, x,y,color):
+    def __init__(self, x,y,color,scale):
         self.x = x
         self.y = y
-        self.headRadius = 18
+        self.headRadius = 18 * scale
         self.eyeXOffset = self.headRadius/3
-        self.eyeRadius = 2
-        self.height = 200
-        self.torsoThickness = 15
+        self.eyeRadius = 2 * scale
+        self.height = 200 * scale
+        self.torsoThickness = 15 * scale
         self.color = color
 
 class Goalie(Player):
 
-    def __init__(self, x,y,color):
-        Player.__init__(self,x,y,color)
+    def __init__(self, x,y,color,scale):
+        Player.__init__(self,x,y,color,scale)
 
 
 class Referee:
