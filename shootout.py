@@ -11,11 +11,7 @@ RIGHT_POST = LEFT_POST + GOAL_LENGTH
 CROSSBAR_TOP = FIELD_WIDTH - FIELD_WIDTH * .9
 BAR_THICKNESS = 5
 
-HEAD_RADIUS = 18
-EYE_X_OFFSET = HEAD_RADIUS/3
-EYE_RADIUS = 2
-GOALIE_HEIGHT = 200
-GOALIE_TORSO_THICKNESS = 15
+
 
 
 class Shootout(object):
@@ -27,7 +23,7 @@ class Shootout(object):
         self.teamB = Team(teamB,'blue')            #create a team with the name of the second country
         self.field = Field(teamA,teamB)     #create the field
         self.referee = Referee()            #create the referee
-        self.goalie = Goalie(LEFT_POST+GOAL_LENGTH/2,CROSSBAR_TOP+GOAL_HEIGHT -GOALIE_HEIGHT)
+        self.goalie = Goalie(LEFT_POST+GOAL_LENGTH/2,CROSSBAR_TOP+GOAL_HEIGHT -200)
         
         self.shootingTeam = self.teamA      #teamA starts with shooting
         self.goalieTeam = self.teamB        #teamB starts with saving
@@ -64,34 +60,30 @@ class Shootout(object):
         self.repaint()
 
     def downKey(self,event):
-        global GOALIE_HEIGHT
-        global GOALIE_TORSO_THICKNESS
-        global HEAD_RADIUS
-        global EYE_RADIUS
-        global EYE_X_OFFSET
-        GOALIE_HEIGHT = GOALIE_HEIGHT * 1.1
-        GOALIE_TORSO_THICKNESS = GOALIE_TORSO_THICKNESS * 1.1
-        HEAD_RADIUS = HEAD_RADIUS * 1.1
-        EYE_RADIUS  = EYE_RADIUS * 1.1
-        EYE_X_OFFSET = HEAD_RADIUS/3
+
+        self.goalie.goalieHeight = self.goalie.goalieHeight * 1.1
+        self.goalie.goalieTorsoThickness = self.goalie.goalieTorsoThickness * 1.1
+        self.goalie.headRadius = self.goalie.headRadius * 1.1
+        self.goalie.eyeRadius  = self.goalie.eyeRadius * 1.1
+        self.goalie.eyeXOffset = self.goalie.headRadius/3
         self.repaint()
 
     def upKey(self,event):
-        global GOALIE_HEIGHT
-        global GOALIE_TORSO_THICKNESS
-        global HEAD_RADIUS
-        global EYE_RADIUS
-        global EYE_X_OFFSET
-        GOALIE_HEIGHT = GOALIE_HEIGHT / 1.1
-        GOALIE_TORSO_THICKNESS = GOALIE_TORSO_THICKNESS / 1.1
-        HEAD_RADIUS = HEAD_RADIUS / 1.1
-        EYE_RADIUS = EYE_RADIUS / 1.1
-        EYE_X_OFFSET = HEAD_RADIUS/3
+
+        self.goalie.goalieHeight = self.goalie.goalieHeight / 1.1
+        self.goalie.goalieTorsoThickness = self.goalie.goalieTorsoThickness / 1.1
+        self.goalie.headRadius = self.goalie.headRadius / 1.1
+        self.goalie.eyeRadius = self.goalie.eyeRadius / 1.1
+        self.goalie.eyeXOffset = self.goalie.headRadius/3
         self.repaint()
 
 
     def shotKeyDetected(self,event):
         pass
+
+
+    def detectCollisions():
+        pass    
     def repaint(self):
 
         self.drawGoal()
@@ -117,19 +109,19 @@ class Shootout(object):
 
         self.canvas.delete('temp')
         #draw the goalie's head
-        self.canvas.create_oval(self.goalie.x-HEAD_RADIUS, self.goalie.y - HEAD_RADIUS, 
-            self.goalie.x + HEAD_RADIUS, self.goalie.y+HEAD_RADIUS, fill='white', tag='temp')
+        self.canvas.create_oval(self.goalie.x-self.goalie.headRadius, self.goalie.y - self.goalie.headRadius, 
+            self.goalie.x + self.goalie.headRadius, self.goalie.y+self.goalie.headRadius, fill='white', tag='temp')
 
         #draw the goalie's eyes
-        self.canvas.create_oval(self.goalie.x-EYE_X_OFFSET-EYE_RADIUS, self.goalie.y - EYE_RADIUS, 
-            self.goalie.x -EYE_X_OFFSET+EYE_RADIUS, self.goalie.y+EYE_RADIUS,fill=self.goalieTeam.color,tag='temp')
+        self.canvas.create_oval(self.goalie.x-self.goalie.eyeXOffset-self.goalie.eyeRadius, self.goalie.y - self.goalie.eyeRadius, 
+            self.goalie.x -self.goalie.eyeXOffset+self.goalie.eyeRadius, self.goalie.y+self.goalie.eyeRadius,fill=self.goalieTeam.color,tag='temp')
 
-        self.canvas.create_oval(self.goalie.x+EYE_X_OFFSET-EYE_RADIUS, self.goalie.y - EYE_RADIUS, 
-            self.goalie.x +EYE_X_OFFSET+EYE_RADIUS, self.goalie.y+EYE_RADIUS, fill=self.goalieTeam.color,tag='temp')
+        self.canvas.create_oval(self.goalie.x+self.goalie.eyeXOffset-self.goalie.eyeRadius, self.goalie.y - self.goalie.eyeRadius, 
+            self.goalie.x +self.goalie.eyeXOffset+self.goalie.eyeRadius, self.goalie.y+self.goalie.eyeRadius, fill=self.goalieTeam.color,tag='temp')
 
         #draw the goalie's torso
-        self.canvas.create_rectangle(self.goalie.x-GOALIE_TORSO_THICKNESS/2, self.goalie.y+HEAD_RADIUS, 
-            self.goalie.x+GOALIE_TORSO_THICKNESS/2,self.goalie.y +GOALIE_HEIGHT/2, fill=self.goalieTeam.color,tag='temp')
+        self.canvas.create_rectangle(self.goalie.x-self.goalie.goalieTorsoThickness/2, self.goalie.y+self.goalie.headRadius, 
+            self.goalie.x+self.goalie.goalieTorsoThickness/2,self.goalie.y +self.goalie.goalieHeight/2, fill=self.goalieTeam.color,tag='temp')
         
         #draw the goalie's arms
 
@@ -160,6 +152,11 @@ class Goalie:
     def __init__(self, x,y ):
         self.x = x
         self.y = y
+        self.headRadius = 18
+        self.eyeXOffset = self.headRadius/3
+        self.eyeRadius = 2
+        self.goalieHeight = 200
+        self.goalieTorsoThickness = 15
 
 class Referee:
 
